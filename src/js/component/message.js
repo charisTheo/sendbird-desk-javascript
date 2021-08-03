@@ -3,6 +3,25 @@ import SendBirdDesk from 'sendbird-desk';
 import { simplify } from '../simplify.js';
 import { parseDom } from '../domparser.js';
 
+const EMAIL_PARSE_REGEX = /(?:(?:[^<>()\[\]\\.,;:+\s@"]+(?:\.[^<>()\[\]\\.,;:+\s@"]+)*)|(?:".+"))@(?:(?:\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(?:(?:[a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))/;
+
+const URL_PARSE_REGEX = /(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z0-9\u00a1-\uffff][a-z0-9\u00a1-\uffff_-]{0,62})?[a-z0-9\u00a1-\uffff]\.)+(?:[a-z\u00a1-\uffff]{2,}\.?))(?::\d{2,5})?(?:[/?#]\S*)?/gi;
+
+const convertURLToLink = token => token.match(URL_PARSE_REGEX)
+  ? `<a href='${token}' target="_blank" rel="noreferrer">${token}</a>`
+  : token;
+
+const convertEmailToLink = token => token.match(EMAIL_PARSE_REGEX) ? `<a href="${`mailto:${token}`}">${token}</a>` : token;
+
+const convertURLsAndEmailsToLinks = message => {
+  if (!message) {
+    return null;
+  }
+  return message.split(new RegExp(`(${URL_PARSE_REGEX.source})`))
+    .map(convertURLToLink)
+    .map(token => typeof token !== 'string' ? token : token.split(new RegExp(`(${EMAIL_PARSE_REGEX.source})`)).map(convertEmailToLink)).join("")
+}
+
 export default class MessageElement {
   constructor(message, streak) {
     this.message = message;
@@ -225,7 +244,7 @@ export default class MessageElement {
         this.messageFile.hide();
         this.media.hide();
         this.messageBox.show();
-        this.messageText.html(this.message.message);
+        this.messageText.html(convertURLsAndEmailsToLinks(this.message.message));
       } else if (this.message.isFileMessage()) {
         if (this.message.type.indexOf('image') >= 0) {
           this.messageBox.hide();
@@ -249,7 +268,8 @@ export default class MessageElement {
         this.messageFile.hide();
         this.media.hide();
         this.messageBox.show();
-        this.messageText.html(this.message.message);
+        const formattedMessage = convertURLsAndEmailsToLinks(this.message.message);
+        this.messageText.html(formattedMessage);
       }
 
       if (this.streak) this.createdAt.hide();

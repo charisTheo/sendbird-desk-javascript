@@ -33,7 +33,7 @@ export default class Login {
       cachedUser.nickname = localStorage.getItem(LOGIN_CACHE_KEY_NICKNAME) || '';
 
       /// advanced option
-      cachedAdvanced.active = localStorage.getItem(LOGIN_CACHE_KEY_ADVANCED) === 'true' || false;
+      cachedAdvanced.active = localStorage.getItem(LOGIN_CACHE_KEY_ADVANCED) === 'true' || true;
       cachedAdvanced.wsHost = localStorage.getItem(LOGIN_CACHE_KEY_ADVANCED_WS_HOST) || '';
       cachedAdvanced.apiHost = localStorage.getItem(LOGIN_CACHE_KEY_ADVANCED_API_HOST) || '';
       cachedAdvanced.deskApiHost = localStorage.getItem(LOGIN_CACHE_KEY_ADVANCED_DESK_API_HOST) || '';

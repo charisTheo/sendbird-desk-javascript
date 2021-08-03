@@ -27,7 +27,7 @@ This section shows you the prerequisites you need for testing Sendbird Desk for 
 - IE 11+
 - Mobile browsers (Android/iOS)
 
-### Try the sample app using your data 
+### Try the sample app using your data
 
 If you would like to customize the sample app for your usage, you can replace the default sample app ID with your ID - which you can obtain by [creating your Sendbird application from the dashboard](https://sendbird.com/docs/chat/v3/ios/getting-started/install-chat-sdk#2-step-1-create-a-sendbird-application-from-your-dashboard).
 
@@ -41,9 +41,13 @@ Following the previous instructions will allow you to experience the sample app 
 
 This section explains the steps you need to take before testing the sample app.
 
+### Add your access token
+
+Add your access token inside `/src/js/widget.js:189`
+
 ### Use npm
 
-Using `npm`, you can install and build the sample as follows: 
+Using `npm`, you can install and build the sample as follows:
 
 ```bash
 npm install
@@ -52,7 +56,7 @@ npm run build
 
 ### Run demo
 
-Access local server by typing `http://127.0.0.1:8888` on your web browser after executing the command as follows: 
+Access local server by typing `http://127.0.0.1:8888` on your web browser after executing the command as follows:
 
 ```bash
 npm run demo
