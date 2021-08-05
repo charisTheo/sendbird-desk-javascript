@@ -33,7 +33,7 @@ export default class Login {
       cachedUser.nickname = localStorage.getItem(LOGIN_CACHE_KEY_NICKNAME) || '';
 
       /// advanced option
-      cachedAdvanced.active = localStorage.getItem(LOGIN_CACHE_KEY_ADVANCED) === 'true' || true;
+      cachedAdvanced.active = localStorage.getItem(LOGIN_CACHE_KEY_ADVANCED) === 'true' || false;
       cachedAdvanced.wsHost = localStorage.getItem(LOGIN_CACHE_KEY_ADVANCED_WS_HOST) || '';
       cachedAdvanced.apiHost = localStorage.getItem(LOGIN_CACHE_KEY_ADVANCED_API_HOST) || '';
       cachedAdvanced.deskApiHost = localStorage.getItem(LOGIN_CACHE_KEY_ADVANCED_DESK_API_HOST) || '';
@@ -105,7 +105,11 @@ export default class Login {
         nickname: nickname.val()
       };
       if (user.appId && user.userId && user.nickname) {
-        const options = {};
+        const options = {
+          wsHost: null,
+          apiHost: null,
+          deskApiHost: null
+        };
         if (caching) {
           localStorage.setItem(LOGIN_CACHE_KEY_APP_ID, user.appId);
           localStorage.setItem(LOGIN_CACHE_KEY_USER_ID, user.userId);
